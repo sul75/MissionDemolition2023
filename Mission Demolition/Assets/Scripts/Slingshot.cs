@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class Slingshot : MonoBehaviour
 {
-    //fields set in the Unity Inspector pane
+    // fields set in the Unity Inspector pane
     [Header("Inscribed")]
     public GameObject projectilePrefab;
     public float velocityMult = 10f;
-    //fields set dynamically
+
+    // fields set dynamically
     [Header("Dynamic")]
     public GameObject launchPoint;
     public Vector3 launchPos;
     public GameObject projectile;
     public bool aimingMode;
- 
+
     void Awake()
     {
         Transform launchPointTrans = transform.Find("LaunchPoint");
@@ -33,6 +34,7 @@ public class Slingshot : MonoBehaviour
         print("Slingshot:OnMouseExit()");
         launchPoint.SetActive(false);
     }
+
     void OnMouseDown()
     {
         //the player has pressed the mouse button while over the Slingshot
@@ -43,6 +45,7 @@ public class Slingshot : MonoBehaviour
         projectile.GetComponent<Rigidbody>().isKinematic = true;
 
     }
+
     void Update()
     {
         if (!aimingMode) return;
@@ -59,7 +62,7 @@ public class Slingshot : MonoBehaviour
         if (mouseDelta.magnitude > maxMagnitude)
         {
             mouseDelta.Normalize();
-            mouseDelta *=maxMagnitude;
+            mouseDelta *= maxMagnitude;
         }
         //move the projectile to this new position
         Vector3 projPos = launchPos + mouseDelta;
@@ -73,7 +76,10 @@ public class Slingshot : MonoBehaviour
             projRB.isKinematic = false;
             projRB.collisionDetectionMode = CollisionDetectionMode.Continuous;
             projRB.velocity = -mouseDelta * velocityMult;
+            FollowCam.POI = projectile;
             projectile = null;
         }
+
+
     }
 }
